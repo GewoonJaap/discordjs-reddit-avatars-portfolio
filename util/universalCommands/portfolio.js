@@ -1,8 +1,20 @@
 const { MessageEmbed } = require('discord.js');
 const request = require('../apiRequest');
+const portfolioData = require('../../model/portfolioData');
 module.exports = {
   execute: async function (bot, option, interaction) {
-    console.log(option);
+    if(!option){
+      const dbData = await portfolioData.findOne({discordId: interaction.member.user.id});
+      if(!dbData){
+        const embed = new MessageEmbed()
+          .setColor(bot.COLOR)
+          .setTitle('Portfolio')
+          .setDescription('You have not set your ETH address yet. Do so with /setwallet <address>')
+          .setTimestamp();
+        return embed;
+      }
+      option = dbData.ETHWallet;
+    }
 
     //https://redditportfolio.com/api/finance/avatars?wallet=0x511A0342fD98d25083588aC8243c3065CfD2CcA5
     const data = await request.execute(`https://redditportfolio.com/api/finance/avatars?wallet=${option}`);

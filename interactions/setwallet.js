@@ -1,29 +1,24 @@
 const slashCommand = require('../util/slashcommand/index');
-const portfolio = require('../util/universalCommands/portfolio');
+const setwallet = require('../util/universalCommands/setwallet');
 module.exports = {
   registerCommand: function (bot) {
     slashCommand.registerCommand(bot, {
-      name: 'portfolio',
-      description: portfolio.description,
+      name: 'setwallet',
+      description: setwallet.description,
       options: [
         {
           name: 'ethaddress',
           description: 'The ETH/Polygon address of the user',
           type: 3,
-          required: false,
+          required: true,
         },
       ],
     });
   },
 
   execute: async function (bot, interaction) {
-    //option is nullable
-    const options = interaction.data.options;
-    let address = undefined;
-    if(options){
-      address = options[0].value;
-    }
-    const embed = await portfolio.execute(bot, address, interaction);
+    const address = interaction.data.options[0].value;
+    const embed = await setwallet.execute(bot, address, interaction);
 
     slashCommand.execute(bot, interaction, {
       embeds: [embed],
