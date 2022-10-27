@@ -3,7 +3,7 @@ module.exports = {
   execute: function (url) {
     return new Promise(function (resolve, reject) {
       request(url, function (error, res, body) {
-        if (!error && (res.statusCode == 200 || res.statusCode == 201 ) ) {
+        if (!error && (res.statusCode == 200 || res.statusCode == 201)) {
           body = JSON.parse(body);
           resolve({ status: true, data: body });
         } else {

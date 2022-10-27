@@ -19,5 +19,6 @@
   "SUCCESS_COLOR": "0x00ff00",
   "ERROR_COLOR": "0x0000ff",
   "INFO_COLOR": "0x0000ff",
-  "MONGODB_URL": "MONGO CONNECT URL"
+  "MONGODB_URL": "MONGO CONNECT URL",
+  "TOPGG_TOKEN": "Top.gg token, used for topgg.js"
 }

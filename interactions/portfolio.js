@@ -20,7 +20,7 @@ module.exports = {
     //option is nullable
     const options = interaction.data.options;
     let address = undefined;
-    if(options){
+    if (options) {
       address = options[0].value;
     }
     const embed = await portfolio.execute(bot, address, interaction);

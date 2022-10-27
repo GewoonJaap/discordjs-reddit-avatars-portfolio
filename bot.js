@@ -9,10 +9,21 @@ const mongoose = require('mongoose');
 mongoose.connect(config.MONGODB_URL, { useNewUrlParser: true });
 const serverConfig = require('./util/serverconfig');
 const serverStats = require('./util/stats/serverStatsHandler');
+const dbots = require('dbots');
 
 const bot = new Discord.Client({
   autoReconnect: true,
 });
+//Todo
+// const poster = new dbots.Poster({
+//   bot,
+//   apiKeys: {
+//     topgg: config.TOPGG_TOKEN,
+//   },
+//   clientLibrary: 'discord.js',
+// });
+
+// poster.startInterval();
 
 bot.OWNERID = config.OWNERID;
 bot.PREFIX = config.PREFIX;

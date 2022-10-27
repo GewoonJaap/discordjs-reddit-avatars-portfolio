@@ -3,9 +3,9 @@ const request = require('../apiRequest');
 const portfolioData = require('../../model/portfolioData');
 module.exports = {
   execute: async function (bot, option, interaction) {
-    if(!option){
-      const dbData = await portfolioData.findOne({discordId: interaction.member.user.id});
-      if(!dbData){
+    if (!option) {
+      const dbData = await portfolioData.findOne({ discordId: interaction.member.user.id });
+      if (!dbData) {
         const embed = new MessageEmbed()
           .setColor(bot.COLOR)
           .setTitle('Portfolio')
@@ -19,7 +19,7 @@ module.exports = {
     //https://redditportfolio.com/api/finance/avatars?wallet=0x511A0342fD98d25083588aC8243c3065CfD2CcA5
     const data = await request.execute(`https://redditportfolio.com/api/finance/avatars?wallet=${option}`);
 
-    if(!data.status){
+    if (!data.status) {
       let errorEmbed = new MessageEmbed();
       errorEmbed.setColor(bot.COLOR);
       errorEmbed.setTitle('Error');
@@ -48,28 +48,26 @@ module.exports = {
         floor_price: data.data.prices[key].floor_price,
         generation: data.data.prices[key].generation,
       });
-    };
+    }
 
     //sort avatarArray by floor_price
-    avatarArray.sort((a, b) => (b.floor_price > a.floor_price) ? 1 : -1);
-    
+    avatarArray.sort((a, b) => (b.floor_price > a.floor_price ? 1 : -1));
+
     //generate embed field text, max 1024 characters
     let embedFieldTexts = [''];
     let embedFieldTextIndex = 0;
     avatarArray.forEach(avatar => {
-      if(calculateTotalTextCharsInArray(embedFieldTexts) >= 5000) return;
-      if(embedFieldTextIndex > 20) return;
+      if (calculateTotalTextCharsInArray(embedFieldTexts) >= 5000) return;
+      if (embedFieldTextIndex > 20) return;
 
       let newText = `**${avatar.name} (${avatar.count})** | Last sale price: **${avatar.last_sale} ETH** | Floor price: **${avatar.floor_price} ETH** | Generation: **${avatar.generation}**\n`;
 
-      if(embedFieldTexts[embedFieldTextIndex].length + newText.length + 1 > 1024){
+      if (embedFieldTexts[embedFieldTextIndex].length + newText.length + 1 > 1024) {
         embedFieldTextIndex++;
         embedFieldTexts.push('');
       }
       embedFieldTexts[embedFieldTextIndex] += newText;
     });
-
-
 
     let USDPriceLastSale = data.data.conversion * ETHPriceLastSale;
     let USDPriceFloor = data.data.conversion * ETHPriceFloor;
@@ -84,18 +82,20 @@ module.exports = {
     });
     embed.setFooter(`Powered by RedditPortfolio.com`);
     embed.setTimestamp(new Date(data.data.sync.toString()));
-    embed.setAuthor(`${interaction.member.user.username}#${interaction.member.user.discriminator}`, 'https://i.imgur.com/Zstqe11.png', 'https://redditportfolio.com/');
+    embed.setAuthor(
+      `${interaction.member.user.username}#${interaction.member.user.discriminator}`,
+      'https://i.imgur.com/Zstqe11.png',
+      'https://redditportfolio.com/'
+    );
     return embed;
-
   },
   description: 'Check the Reddit Avatars portfolio of a Ethereum/Polygon address',
 };
 
-function calculateTotalTextCharsInArray(array){
+function calculateTotalTextCharsInArray(array) {
   let totalChars = 0;
   array.forEach(element => {
     totalChars += element.length;
   });
   return totalChars;
 }
-
