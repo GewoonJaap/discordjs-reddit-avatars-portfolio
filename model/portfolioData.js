@@ -5,6 +5,7 @@ const portfolioSchema = new Schema(
   {
     discordId: String,
     ETHWallet: String,
+    RedditUsername: String,
   },
   {
     timestamps: {

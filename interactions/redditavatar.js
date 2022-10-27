@@ -1,10 +1,10 @@
 const slashCommand = require('../util/slashcommand/index');
-const portfolio = require('../util/universalCommands/portfolio');
+const redditAvatar = require('../util/universalCommands/redditavatar');
 module.exports = {
   registerCommand: function (bot) {
     slashCommand.registerCommand(bot, {
-      name: 'portfolio',
-      description: portfolio.description,
+      name: 'redditavatar',
+      description: redditAvatar.description,
       options: [
         {
           name: 'ethaddress',
@@ -31,7 +31,7 @@ module.exports = {
       address = options.filter(option => option.name === 'ethaddress')[0]?.value;
       redditUsername = options.filter(option => option.name === 'redditusername')[0]?.value;
     }
-    const embed = await portfolio.execute(bot, address, redditUsername, interaction);
+    const embed = await redditAvatar.execute(bot, address, redditUsername, interaction);
 
     slashCommand.execute(bot, interaction, {
       embeds: [embed],

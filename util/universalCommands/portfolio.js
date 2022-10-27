@@ -2,8 +2,8 @@ const { MessageEmbed } = require('discord.js');
 const request = require('../apiRequest');
 const portfolioData = require('../../model/portfolioData');
 module.exports = {
-  execute: async function (bot, option, interaction) {
-    if (!option) {
+  execute: async function (bot, ethAddress, redditUsername, interaction) {
+    if (!ethAddress && !redditUsername) {
       const dbData = await portfolioData.findOne({ discordId: interaction.member.user.id });
       if (!dbData) {
         const embed = new MessageEmbed()
@@ -13,11 +13,24 @@ module.exports = {
           .setTimestamp();
         return embed;
       }
-      option = dbData.ETHWallet;
+      ethAddress = dbData.ETHWallet;
+    }
+
+    if (!ethAddress && redditUsername) {
+      const dbData = await portfolioData.findOne({ RedditUsername: redditUsername });
+      if (!dbData) {
+        const embed = new MessageEmbed()
+          .setColor(bot.COLOR)
+          .setTitle('Portfolio')
+          .setDescription(`No ETH address found for Reddit user ${redditUsername}`)
+          .setTimestamp();
+        return embed;
+      }
+      ethAddress = dbData.ETHWallet;
     }
 
     //https://redditportfolio.com/api/finance/avatars?wallet=0x511A0342fD98d25083588aC8243c3065CfD2CcA5
-    const data = await request.execute(`https://redditportfolio.com/api/finance/avatars?wallet=${option}`);
+    const data = await request.execute(`https://redditportfolio.com/api/finance/avatars?wallet=${ethAddress}`);
 
     if (!data.status) {
       let errorEmbed = new MessageEmbed();
@@ -73,7 +86,7 @@ module.exports = {
     let USDPriceFloor = data.data.conversion * ETHPriceFloor;
 
     const embed = new MessageEmbed();
-    embed.setTitle(`Portfolio of ${option}`);
+    embed.setTitle(`Portfolio of ${ethAddress}`);
     embed.addField(`Total last sale value:`, `${USDPriceLastSale.toFixed(2)} USD | ${ETHPriceLastSale.toFixed(2)} ETH`);
     embed.addField(`Total floor value:`, `${USDPriceFloor.toFixed(2)} USD | ${ETHPriceFloor.toFixed(2)} ETH`);
     embed.addField(`Total avatars:`, `${avatarArray.length}`);

@@ -1,14 +1,14 @@
 const slashCommand = require('../util/slashcommand/index');
-const setwallet = require('../util/universalCommands/setwallet');
+const setRedditUsername = require('../util/universalCommands/setredditusername');
 module.exports = {
   registerCommand: function (bot) {
     slashCommand.registerCommand(bot, {
-      name: 'setwallet',
-      description: setwallet.description,
+      name: 'setusername',
+      description: setRedditUsername.description,
       options: [
         {
-          name: 'ethaddress',
-          description: 'Your ETH/Polygon address',
+          name: 'redditusername',
+          description: 'Your Reddit username',
           type: 3,
           required: true,
         },
@@ -18,7 +18,7 @@ module.exports = {
 
   execute: async function (bot, interaction) {
     const address = interaction.data.options[0].value;
-    const embed = await setwallet.execute(bot, address, interaction);
+    const embed = await setRedditUsername.execute(bot, address, interaction);
 
     slashCommand.execute(bot, interaction, {
       embeds: [embed],
