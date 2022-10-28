@@ -29,8 +29,8 @@ module.exports = {
       ethAddress = dbData.ETHWallet;
     }
 
-    //https://redditportfolio.com/api/finance/avatars?wallet=0x511A0342fD98d25083588aC8243c3065CfD2CcA5
-    const data = await request.execute(`https://redditportfolio.com/api/finance/avatars?wallet=${ethAddress}`);
+    //https://avatarcalculator.com/api/finance/avatars?wallet=0x511A0342fD98d25083588aC8243c3065CfD2CcA5
+    const data = await request.execute(`https://avatarcalculator.com/api/finance/avatars?wallet=${ethAddress}`);
 
     if (!data.status) {
       let errorEmbed = new MessageEmbed();
@@ -93,12 +93,12 @@ module.exports = {
     embedFieldTexts.forEach((text, index) => {
       embed.addField(`Avatars (${index + 1}/${embedFieldTexts.length}):`, text);
     });
-    embed.setFooter(`Powered by RedditPortfolio.com`);
+    embed.setFooter(`Powered by AvatarCalculator.com`);
     embed.setTimestamp(new Date(data.data.sync.toString()));
     embed.setAuthor(
       `${interaction.member.user.username}#${interaction.member.user.discriminator}`,
       'https://i.imgur.com/Zstqe11.png',
-      'https://redditportfolio.com/'
+      'https://avatarcalculator.com/'
     );
     return embed;
   },
